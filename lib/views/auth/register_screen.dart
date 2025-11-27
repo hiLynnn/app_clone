@@ -8,20 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authController = AuthController();
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _isLoading = false;
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _authController = AuthController();
   UserRole _selectedRole = UserRole.tenant;
 
   @override
@@ -31,47 +34,46 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 24.w),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 60.h),
-                  Center(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.home_rounded,
-                            size: 48.w,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
+                  SizedBox(height: 20.h),
+                  IconButton(
+                    onPressed: () => context.pop(),
+                    icon: Container(
+                      padding: EdgeInsets.all(8.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 20.sp,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
+                    iconSize: 36.sp,
                   ),
-
-                  SizedBox(height: 48.h),
+                  SizedBox(height: 20.h),
                   Text(
-                    AppTexts.welcomeBack,
+                    AppTexts.createAccount,
                     style: TextStyle(
-                      fontSize: 28.sp,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
+                      letterSpacing: -0.5,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    'Sign in to continue',
+                    'Fill in your details to get started',
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: AppColors.textSecondary,
+                      letterSpacing: 0.2,
                     ),
                   ),
                   SizedBox(height: 32.h),
@@ -91,31 +93,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
+                  CustomTextField(
+                    controller: _fullNameController,
+                    label: 'Full Name',
+                    prefixIcon: Icons.person_outline,
+                  ),
+                  SizedBox(height: 16.h),
                   CustomTextField(
                     controller: _emailController,
-                    label: "Email",
+                    label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
                     controller: _passwordController,
-                    label: "Password",
+                    label: 'Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: _obscurePassword,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
                     suffixIcon: IconButton(
                       onPressed: () =>
                           setState(() => _obscurePassword = !_obscurePassword),
@@ -129,47 +125,51 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.push('/forgot-password'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  CustomTextField(
+                    controller: _confirmPasswordController,
+                    label: 'Confirm Password',
+                    prefixIcon: Icons.lock_outline,
+                    obscureText: _obscureConfirmPassword,
+                    suffixIcon: IconButton(
+                      onPressed: () => setState(
+                        () =>
+                            _obscureConfirmPassword = !_obscureConfirmPassword,
                       ),
-                      child: Text(
-                        AppTexts.forgotPassword,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      icon: Icon(
+                        _obscureConfirmPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: AppColors.textSecondary,
+                        size: 20.sp,
                       ),
                     ),
                   ),
                   SizedBox(height: 32.h),
-                  CustomButton(
-                    text: 'Sign In',
-                    isLoading: _isLoading,
-                    onPressed: () {
-                      _handleLogin();
-                    },
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: double.infinity,
                     height: 56.h,
+                    child: CustomButton(
+                      text: 'Create Account',
+                      onPressed: () => _handleRegister(),
+                      isLoading: _isLoading,
+                    ),
                   ),
                   SizedBox(height: 24.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an account?',
+                        'Already have an account?',
                         style: TextStyle(
-                          color: AppColors.textSecondary,
                           fontSize: 14.sp,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                       TextButton(
-                        onPressed: () => context.push('/register'),
+                        onPressed: () => context.go('/auth'),
                         child: Text(
-                          'Sign Up',
+                          'Sign In',
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
@@ -187,19 +187,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+        return;
+      }
+
       setState(() => _isLoading = true);
 
       try {
-        final user = await _authController.loginWithRole(
-          _emailController.text,
-          _passwordController.text,
-          _selectedRole,
+        final user = await _authController.register(
+          fullName: _fullNameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          role: _selectedRole,
         );
         if (mounted && user != null) {
           context.go(
-            user.role == UserRole.landlord ? '/landlord/dashboard' : '/home',
+            _selectedRole == UserRole.landlord ? 'landlord/dashboard' : 'home',
           );
         }
       } catch (e) {

@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    StorageService.clearAll();
+    // StorageService.clearAll();
     _navigateToNextScreen();
   }
 
