@@ -5,11 +5,6 @@ import 'package:app_clone/views/booking/bookings_list/bookings_list_screen.dart'
 import 'package:app_clone/views/chat/messages_screen.dart';
 import 'package:app_clone/views/favorites/favorites_screen.dart';
 import 'package:app_clone/views/home/home_screen.dart';
-import 'package:app_clone/views/landlord/landlord_bookings/landlord_bookings_screen.dart';
-import 'package:app_clone/views/landlord/landlord_dashboard/landlord_dashboard_screen.dart';
-import 'package:app_clone/views/landlord/landlord_profile/landlord_profile_screen.dart';
-import 'package:app_clone/views/landlord/landlord_properties/landlord_properties_screen.dart';
-import 'package:app_clone/views/landlord_layout.dart';
 import 'package:app_clone/views/main_layout.dart';
 import 'package:app_clone/views/onboarding/onboarding_screen.dart';
 import 'package:app_clone/views/profile/profile_screen.dart';
@@ -69,34 +64,6 @@ final router = GoRouter(
         GoRoute(
           path: '/profile',
           builder: (context, state) => const ProfileScreen(),
-        ),
-      ],
-    ),
-
-    //landlord routes
-    ShellRoute(
-      builder: (context, state, child) =>
-          LandlordLayout(location: state.uri.toString(), child: child),
-      routes: [
-        GoRoute(
-          path: '/landlord/dashboard',
-          builder: (context, state) => const LandlordDashboardScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/properties',
-          builder: (context, state) => const LandlordPropertiesScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/messages',
-          builder: (context, state) => const MessagesScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/bookings',
-          builder: (context, state) => const LandlordBookingsScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/profile',
-          builder: (context, state) => const LandlordProfileScreen(),
         ),
       ],
     ),

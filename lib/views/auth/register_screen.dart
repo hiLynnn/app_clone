@@ -77,23 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(height: 32.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _buildRoleTab(UserRole.tenant, 'Tenant'),
-                        ),
-                        Expanded(
-                          child: _buildRoleTab(UserRole.landlord, 'Landlord'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
                   CustomTextField(
                     controller: _fullNameController,
                     label: 'Full Name',
@@ -168,6 +151,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       TextButton(
                         onPressed: () => context.go('/auth'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        ),
                         child: Text(
                           'Sign In',
                           style: TextStyle(
@@ -203,45 +190,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
           fullName: _fullNameController.text,
           email: _emailController.text,
           password: _passwordController.text,
-          role: _selectedRole,
         );
         if (mounted && user != null) {
-          context.go(
-            _selectedRole == UserRole.landlord ? 'landlord/dashboard' : 'home',
-          );
+          context.go('home');
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(e.toString())));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
         }
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }
     }
-  }
-
-  Widget _buildRoleTab(UserRole role, String label) {
-    final isSelected = _selectedRole == role;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedRole = role),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
-          ),
-        ),
-      ),
-    );
   }
 }

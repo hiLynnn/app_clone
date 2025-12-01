@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _isLoading = false;
-  UserRole _selectedRole = UserRole.tenant;
 
   @override
   Widget build(BuildContext context) {
@@ -72,23 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: AppColors.textSecondary,
-                    ),
-                  ),
-                  SizedBox(height: 32.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _buildRoleTab(UserRole.tenant, 'Tenant'),
-                        ),
-                        Expanded(
-                          child: _buildRoleTab(UserRole.landlord, 'Landlord'),
-                        ),
-                      ],
                     ),
                   ),
                   SizedBox(height: 24.h),
@@ -192,15 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       try {
-        final user = await _authController.loginWithRole(
-          _emailController.text,
-          _passwordController.text,
-          _selectedRole,
-        );
-        if (mounted && user != null) {
-          context.go(
-            user.role == UserRole.landlord ? '/landlord/dashboard' : '/home',
-          );
+        if (mounted) {
+          context.go('/home');
         }
       } catch (e) {
         if (mounted) {
@@ -212,28 +187,5 @@ class _LoginScreenState extends State<LoginScreen> {
         if (mounted) setState(() => _isLoading = false);
       }
     }
-  }
-
-  Widget _buildRoleTab(UserRole role, String label) {
-    final isSelected = _selectedRole == role;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedRole = role),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
-          ),
-        ),
-      ),
-    );
   }
 }

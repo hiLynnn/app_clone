@@ -9,21 +9,11 @@ class AuthController extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   /// simulated authentication methods (to be replaced with firebase later)
-  Future<User?> loginWithRole(
-    String email,
-    String password,
-    UserRole expectedRole,
-  ) async {
+  Future<User?> loginWithRole(String email, String password) async {
     _isLoading = true;
     notifyListeners();
     try {
       await Future.delayed(const Duration(seconds: 2));
-
-      _currentUser = User.dummyUsers.firstWhere(
-        (user) => user.email == email && user.role == expectedRole,
-        orElse: () => throw Exception('Invalid credentials or role'),
-      );
-
       return _currentUser;
     } catch (e) {
       rethrow;
@@ -37,7 +27,6 @@ class AuthController extends ChangeNotifier {
     required String fullName,
     required String email,
     required String password,
-    required UserRole role,
   }) async {
     _isLoading = true;
     notifyListeners();
@@ -50,7 +39,6 @@ class AuthController extends ChangeNotifier {
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         fullName: fullName,
         email: email,
-        role: role,
       );
       return _currentUser;
     } catch (e) {
@@ -75,7 +63,7 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> _resetPassword(String email) async {
+  Future<void> resetPassword(String email) async {
     _isLoading = true;
     notifyListeners();
 
@@ -91,8 +79,6 @@ class AuthController extends ChangeNotifier {
   //helper method to determine initial route
   String getInitialRoute() {
     if (_currentUser == null) return '/auth';
-    return _currentUser!.role == UserRole.landlord
-        ? '/landlord/dashboard'
-        : '/home';
+    return '/home';
   }
 }
