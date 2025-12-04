@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/property_model.dart';
 
 class PropertyService {
-  static const baseUrl = "http://42.115.7.129:8080/api/properties.php";
+  static const baseUrl = "https://api.sdfsdf.co.kr/api/properties.php";
 
   static Future<List<PropertyModel>> fetchHotProperties({
     int page = 1,

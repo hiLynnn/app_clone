@@ -4,7 +4,7 @@ import 'package:app_clone/models/banner_model.dart';
 import 'package:http/http.dart' as http;
 
 class BannerService {
-  static const String baseUrl = "http://42.115.7.129:8080";
+  static const String baseUrl = "https://api.sdfsdf.co.kr/";
 
   static Future<List<BannerModel>> getMainBanners() async {
     final url = Uri.parse(
