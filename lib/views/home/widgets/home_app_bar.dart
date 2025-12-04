@@ -17,6 +17,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     return SliverAppBar(
       pinned: true,
       floating: false,
+      backgroundColor: AppColors.background,
       title: Image.asset(
         'assets/images/logo.jpg',
         height: 36.h,
@@ -27,7 +28,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
           children: [
             //language dropdown
             Container(
-              width: 100.w,
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade400, width: 1),

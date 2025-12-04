@@ -1,3 +1,4 @@
+import 'package:app_clone/core/common/utils/app_string.dart';
 import 'package:app_clone/core/constants/color_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -20,31 +21,31 @@ class BottomNavigation extends StatelessWidget {
       backgroundColor: AppColors.surface,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: AppColors.textSecondary,
-      items: const [
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search_outlined),
+          activeIcon: Icon(Icons.search),
+          label: AppString.of(context).footer_search,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.location_on_outlined),
+          activeIcon: Icon(Icons.location_on),
+          label: AppString.of(context).footer_nearby,
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
-          label: 'Home',
+          label: AppString.of(context).footer_home,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_outline),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Saved',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.book_outlined),
-          activeIcon: Icon(Icons.book),
-          label: 'Bookings',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_outlined),
-          activeIcon: Icon(Icons.chat),
-          label: 'Chat',
+          icon: Icon(Icons.list_outlined),
+          activeIcon: Icon(Icons.list),
+          label: AppString.of(context).footer_board,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
-          label: 'Profile',
+          label: AppString.of(context).footer_mypage,
         ),
       ],
     );

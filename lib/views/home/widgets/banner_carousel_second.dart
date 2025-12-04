@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class BannerCarousel extends StatelessWidget {
-  BannerCarousel({super.key});
+class BannerCarouselSecond extends StatelessWidget {
+  BannerCarouselSecond({super.key});
 
   final HomeController controller = Get.find<HomeController>();
 
@@ -16,20 +16,20 @@ class BannerCarousel extends StatelessWidget {
     return Obx(() {
       if (controller.isBannerLoading.value) {
         return SizedBox(
-          height: 180.h,
+          height: 100.h,
           child: const Center(child: CircularProgressIndicator()),
         );
       }
 
-      if (controller.banners.isEmpty) {
+      if (controller.secondBanners.isEmpty) {
         return SizedBox(
-          height: 180.h,
-          child: const Center(child: Text("No banners available")),
+          height: 100.h,
+          child: const Center(child: Text("No Second Banners available")),
         );
       }
 
       return CarouselSlider(
-        items: controller.banners.map((BannerModel banner) {
+        items: controller.secondBanners.map((BannerModel banner) {
           return Container(
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.symmetric(horizontal: 5.w),
@@ -62,7 +62,7 @@ class BannerCarousel extends StatelessWidget {
           );
         }).toList(),
         options: CarouselOptions(
-          height: 180.h,
+          height: 100.h,
           viewportFraction: 0.9,
           autoPlay: true,
           enlargeCenterPage: true,

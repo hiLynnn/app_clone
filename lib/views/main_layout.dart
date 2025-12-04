@@ -32,11 +32,12 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   int _getIndexFromLocation(String location) {
-    if (location.startsWith('/favorites')) return 1;
-    if (location.startsWith('/bookings')) return 2;
-    if (location.startsWith('/messages')) return 3;
+    if (location.startsWith('/search')) return 0;
+    if (location.startsWith('/nearby')) return 1;
+    if (location.startsWith('/home')) return 2;
+    if (location.startsWith('/board')) return 3;
     if (location.startsWith('/profile')) return 4;
-    return 0; //default to home
+    return 2; //default to home
   }
 
   @override
@@ -48,16 +49,16 @@ class _MainLayoutState extends State<MainLayout> {
         onTap: (index) {
           switch (index) {
             case 0:
-              context.go('/home');
+              context.go('/search');
               break;
             case 1:
-              context.go('/favorites');
+              context.go('/nearby');
               break;
             case 2:
-              context.go('/bookings');
+              context.go('/home');
               break;
             case 3:
-              context.go('/messages');
+              context.go('/board');
               break;
             case 4:
               context.go('/profile');

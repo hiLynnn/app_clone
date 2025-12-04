@@ -1,3 +1,9 @@
 {
-    "findYourHome" : "Tìm nhà mơ ước"
+    "findYourHome" : "Tìm nhà mơ ước",
+    "footer_search": "Tìm kiếm",
+    "footer_nearby": "Gần đây",
+    "footer_home": "Trang chủ",
+    "footer_board": "Bảng tin",
+    "footer_mypage": "Cá nhân",
+    "quick_menu": "Quick Menu"
 }

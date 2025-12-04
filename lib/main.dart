@@ -1,3 +1,4 @@
+import 'package:app_clone/controllers/home_controller.dart';
 import 'package:app_clone/core/router/router.dart';
 import 'package:app_clone/core/services/storage_service.dart';
 import 'package:app_clone/l10n/app_localizations.dart';
@@ -14,20 +15,27 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
+
     return ScreenUtilInit(
       designSize: const Size(411, 917),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp.router(
+      builder: (_, __) {
+        return GetMaterialApp.router(
+          debugShowCheckedModeBanner: false,
+
+          theme: ThemeData(fontFamily: 'Pretendard'),
+
+          routerDelegate: router.routerDelegate,
+          routeInformationParser: router.routeInformationParser,
+          routeInformationProvider: router.routeInformationProvider,
+
+          locale: Get.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          debugShowCheckedModeBanner: false,
-          routerConfig: router,
-          locale: Get.locale,
         );
       },
     );

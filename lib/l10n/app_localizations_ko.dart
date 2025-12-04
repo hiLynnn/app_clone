@@ -10,4 +10,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get findYourHome => '한국어';
+
+  @override
+  String get footer_search => '상세검색';
+
+  @override
+  String get footer_nearby => '내위치매물';
+
+  @override
+  String get footer_home => '홈';
+
+  @override
+  String get footer_board => '게시판';
+
+  @override
+  String get footer_mypage => '마이페이지';
+
+  @override
+  String get quick_menu => '퀵메뉴';
 }

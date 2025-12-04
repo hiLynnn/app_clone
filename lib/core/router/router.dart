@@ -1,9 +1,9 @@
 import 'package:app_clone/views/auth/forgot_password_screen.dart';
 import 'package:app_clone/views/auth/login_screen.dart';
 import 'package:app_clone/views/auth/register_screen.dart';
-import 'package:app_clone/views/booking/bookings_list/bookings_list_screen.dart';
-import 'package:app_clone/views/chat/messages_screen.dart';
-import 'package:app_clone/views/favorites/favorites_screen.dart';
+import 'package:app_clone/views/search/search_screen.dart';
+import 'package:app_clone/views/board/board_screen.dart';
+import 'package:app_clone/views/nearby/nearby_screen.dart';
 import 'package:app_clone/views/home/home_screen.dart';
 import 'package:app_clone/views/main_layout.dart';
 import 'package:app_clone/views/onboarding/onboarding_screen.dart';
@@ -50,16 +50,16 @@ final router = GoRouter(
           routes: const [],
         ),
         GoRoute(
-          path: '/favorites',
-          builder: (context, state) => const FavoritesScreen(),
+          path: '/nearby',
+          builder: (context, state) => const NearbyScreen(),
         ),
         GoRoute(
-          path: '/bookings',
-          builder: (context, state) => const BookingsListScreen(),
+          path: '/search',
+          builder: (context, state) => const SearchScreen(),
         ),
         GoRoute(
-          path: '/messages',
-          builder: (context, state) => const MessagesScreen(),
+          path: '/board',
+          builder: (context, state) => const BoardScreen(),
         ),
         GoRoute(
           path: '/profile',

@@ -1,3 +1,9 @@
 {
-    "findYourHome" : "한국어"
+    "findYourHome" : "한국어",
+    "footer_search": "상세검색",
+    "footer_nearby": "내위치매물",
+    "footer_home": "홈",
+    "footer_board": "게시판",
+    "footer_mypage": "마이페이지",
+    "quick_menu": "퀵메뉴"
 }

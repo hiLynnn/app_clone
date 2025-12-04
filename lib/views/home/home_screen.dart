@@ -1,10 +1,18 @@
+import 'package:app_clone/controllers/home_controller.dart';
 import 'package:app_clone/core/common/utils/app_string.dart';
 import 'package:app_clone/core/constants/color_constants.dart';
-import 'package:app_clone/core/constants/text_constants.dart';
+import 'package:app_clone/models/quick_menu_model.dart';
+import 'package:app_clone/models/property_model.dart';
+import 'package:app_clone/services/property_service.dart';
 import 'package:app_clone/views/home/widgets/banner_carousel.dart';
+import 'package:app_clone/views/home/widgets/banner_carousel_second.dart';
+import 'package:app_clone/views/home/widgets/quick_menu_grid.dart';
 import 'package:app_clone/views/home/widgets/home_app_bar.dart';
+import 'package:app_clone/views/home/widgets/property_card.dart';
+import 'package:app_clone/views/home/widgets/property_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +22,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<PropertyModel> hotItems = [];
+  bool loadingHot = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadHot();
+  }
+
+  Future<void> loadHot() async {
+    final data = await PropertyService.fetchHotProperties();
+    setState(() {
+      hotItems = data;
+      loadingHot = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,55 +47,77 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CustomScrollView(
           slivers: [
             HomeAppBar(),
+
+            // --- Banner ---
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(16.w),
+                child: BannerCarousel(),
+              ),
+            ),
+
+            // --- Quick Menu ---
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.of(context).findYourHome,
+                      AppString.of(context).quick_menu,
                       style: TextStyle(
-                        fontSize: 24.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: EdgeInsets.all(16.w),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.search,
-                              color: AppColors.textSecondary,
-                            ),
-                            SizedBox(width: 12.w),
-                            Text(
-                              AppTexts.searchHint,
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 16.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    SizedBox(height: 12.h),
+
+                    Obx(() {
+                      final controller = Get.find<HomeController>();
+
+                      if (controller.isQuickMenuLoading.value) {
+                        return SizedBox(
+                          height: 120,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      return QuickMenuGrid(items: controller.quickMenus);
+                    }),
                   ],
                 ),
               ),
             ),
+
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.only(top: 16.h),
-                // child: BannerCarousel(),
+                padding: EdgeInsets.all(16.w),
+                child: Text(
+                  "추천 매물",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: loadingHot
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : PropertyCarouselPager(items: hotItems),
+            ),
+
+            // --- Second Banner ---
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16.w),
+                child: BannerCarouselSecond(),
               ),
             ),
           ],

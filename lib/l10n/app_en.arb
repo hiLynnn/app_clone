@@ -1,3 +1,9 @@
 {
-    "findYourHome" : "Findddddd"
+    "findYourHome" : "Findddddd",
+    "footer_search" : "Search",
+    "footer_nearby": "Nearby",
+    "footer_home": "Home",
+    "footer_board": "Board",
+    "footer_mypage": "My Page",
+    "quick_menu": "Quick Menu"
 }

@@ -26,6 +26,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.7.3
+  shimmer: ^3.0.0
+
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -40,3 +42,16 @@ flutter:
   assets:
     - assets/images/
     - assets/images/onboarding/
+    - assets/images/house/
+    - assets/fonts/
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.otf
+          weight: 700
