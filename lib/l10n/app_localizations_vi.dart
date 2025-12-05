@@ -121,4 +121,34 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profile_logout_sub => 'Thoát tài khoản';
+
+  @override
+  String get search_area => 'Khu vực';
+
+  @override
+  String get search_pick_location => 'Chọn khu vực';
+
+  @override
+  String get search_loading_location => 'Đang tải khu vực...';
+
+  @override
+  String get search_deal_type => 'Loại giao dịch';
+
+  @override
+  String get deal_sale => 'Mua';
+
+  @override
+  String get deal_rent => 'Thuê';
+
+  @override
+  String get search_rent_type => 'Hình thức thuê (Theo tháng / Theo năm)';
+
+  @override
+  String get error_pick_location => 'Vui lòng chọn khu vực';
+
+  @override
+  String get error_pick_rent_type => 'Vui lòng chọn hình thức thuê';
+
+  @override
+  String get error_search => 'Đã xảy ra lỗi khi tìm kiếm';
 }

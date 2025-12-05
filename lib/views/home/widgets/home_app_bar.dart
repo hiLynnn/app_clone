@@ -12,7 +12,8 @@ class HomeAppBar extends StatefulWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  String selectedLanguageText = "English";
+  String selectedLanguageText = "English"; // Default UI text
+  String selectedLangCode = "en"; // Anh, Việt, Hàn
 
   @override
   void initState() {
@@ -21,32 +22,45 @@ class _HomeAppBarState extends State<HomeAppBar> {
   }
 
   // ======================================
-  // Load saved language
+  // Load language from SharedPreferences
   // ======================================
   void _loadSavedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final code = prefs.getString("app_lang") ?? "en";
+    final lang = prefs.getString("app_lang") ?? "en";
 
-    setState(() {
-      selectedLanguageText = code == "en"
-          ? "English"
-          : code == "vi"
-          ? "Vietnamese"
-          : "한국어";
-    });
+    Locale locale;
+
+    switch (lang) {
+      case "vi":
+        locale = const Locale("vi", "VN");
+        selectedLanguageText = "Vietnamese";
+        break;
+      case "ko":
+        locale = const Locale("ko", "KR");
+        selectedLanguageText = "한국어";
+        break;
+      default:
+        locale = const Locale("en", "US");
+        selectedLanguageText = "English";
+        break;
+    }
+
+    selectedLangCode = lang;
+
+    // update lại locale khi mở app
+    Get.updateLocale(locale);
+
+    if (mounted) setState(() {});
   }
 
   // ======================================
   // Change language + save to SharedPreferences
   // ======================================
   void changeLanguage(String lang) async {
-    late Locale newLocale;
+    Locale newLocale;
+    selectedLangCode = lang;
 
     switch (lang) {
-      case "en":
-        newLocale = const Locale("en", "US");
-        selectedLanguageText = "English";
-        break;
       case "vi":
         newLocale = const Locale("vi", "VN");
         selectedLanguageText = "Vietnamese";
@@ -55,21 +69,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
         newLocale = const Locale("ko", "KR");
         selectedLanguageText = "한국어";
         break;
+      default:
+        newLocale = const Locale("en", "US");
+        selectedLanguageText = "English";
+        break;
     }
 
-    // Lưu vào SharedPreferences
+    // Save
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("app_lang", lang);
 
-    setState(() {});
+    if (mounted) setState(() {});
 
-    // Cập nhật ngôn ngữ của GetX
+    // Update app language
     Get.updateLocale(newLocale);
   }
 
-  // ======================================
-  // UI
-  // ======================================
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -84,7 +99,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
       actions: [
         Row(
           children: [
-            // Language Dropdown
+            // ===========================
+            // LANGUAGE DROPDOWN
+            // ===========================
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
               decoration: BoxDecoration(
@@ -92,10 +109,11 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: PopupMenuButton<String>(
+                initialValue: selectedLangCode,
                 onSelected: changeLanguage,
                 itemBuilder: (context) => const [
                   PopupMenuItem(value: 'en', child: Text("English")),
-                  PopupMenuItem(value: 'vi', child: Text("Vietnamese")),
+                  PopupMenuItem(value: 'vi', child: Text("Tiếng Việt")),
                   PopupMenuItem(value: 'ko', child: Text("한국어")),
                 ],
                 child: Row(
@@ -118,7 +136,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
             SizedBox(width: 14.w),
 
-            // Notification icon + badge
+            // ===========================
+            // NOTIFICATION ICON
+            // ===========================
             Stack(
               clipBehavior: Clip.none,
               children: [

@@ -121,4 +121,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get profile_logout_sub => '로그아웃';
+
+  @override
+  String get search_area => '지역';
+
+  @override
+  String get search_pick_location => '지역 선택';
+
+  @override
+  String get search_loading_location => '지역 불러오는 중...';
+
+  @override
+  String get search_deal_type => '거래 유형';
+
+  @override
+  String get deal_sale => '매매';
+
+  @override
+  String get deal_rent => '임대';
+
+  @override
+  String get search_rent_type => '임대 형태 (월세 / 년세)';
+
+  @override
+  String get error_pick_location => '지역을 선택하세요';
+
+  @override
+  String get error_pick_rent_type => '임대 형태(월세/년세)를 선택하세요';
+
+  @override
+  String get error_search => '검색 오류';
 }

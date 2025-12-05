@@ -1,8 +1,8 @@
+import 'package:app_clone/core/common/utils/app_string.dart';
 import 'package:app_clone/services/property_service.dart';
 import 'package:app_clone/views/search/search_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app_clone/core/common/utils/app_string.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,65 +12,85 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String selectedCategory = "매매";
-  List<String> selectedTypes = [];
+  // ====================== STATES ======================
+  String selectedDealType = "매매"; // giữ value Hàn cho API: 매매 / 임대
+  String? selectedRentType; // 월세 / 년세 (chỉ khi 임대)
   int? selectedLocationId;
+  String? selectedLocationLabel;
 
   bool loading = false;
+  bool loadingLocations = true;
 
   final GlobalKey locationKey = GlobalKey();
 
-  final List<Map<String, dynamic>> locations = [
-    {"id": 4, "key": "location_danang"},
-    {"id": 5, "key": "location_hcm"},
-    {"id": 6, "key": "location_hanoi"},
-  ];
+  // API DATA
+  List<Map<String, dynamic>> locations = [];
 
-  final List<Map<String, String>> propertyTypes = [
-    {"key": "토지", "label_key": "property_land"},
-    {"key": "아파트", "label_key": "property_apartment"},
-    {"key": "빌라", "label_key": "property_villa"},
-    {"key": "오피스텔", "label_key": "property_officetel"},
-  ];
+  // dùng value Hàn để bắn API
+  final rentTypes = ["월세", "년세"];
 
-  String? selectedLocationLabel;
+  @override
+  void initState() {
+    super.initState();
+    _loadLocations();
+  }
+
+  // ====================== LOAD LOCATIONS ======================
+  void _loadLocations() async {
+    try {
+      final data = await PropertyService.getLocations();
+
+      data.sort((a, b) => a["sort_order"].compareTo(b["sort_order"]));
+
+      setState(() {
+        locations = data;
+        loadingLocations = false;
+      });
+    } catch (e) {
+      loadingLocations = false;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final str = AppString.of(context);
+    final strings = AppString.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(str.search_title), centerTitle: true),
+      appBar: AppBar(title: Text(strings.search_title), centerTitle: true),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ===================== LOCATION =====================
             Text(
-              str.location,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              strings.search_area,
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
 
             GestureDetector(
               key: locationKey,
-              onTap: () => _openLocationPicker(),
+              onTap: loadingLocations ? null : _openLocationPicker,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 12,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                   border: Border.all(color: Colors.black.withOpacity(0.4)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      selectedLocationLabel ?? str.location_placeholder,
-                      style: const TextStyle(fontSize: 16),
+                    Expanded(
+                      child: Text(
+                        loadingLocations
+                            ? strings.search_loading_location
+                            : (selectedLocationLabel ??
+                                  strings.search_pick_location),
+                        style: TextStyle(fontSize: 16.sp),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     const Icon(Icons.arrow_drop_down),
                   ],
@@ -78,86 +98,74 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
 
-            const SizedBox(height: 25),
+            SizedBox(height: 25.h),
 
-            // ===================== CATEGORY =====================
+            // ===================== DEAL TYPE =====================
             Text(
-              str.category,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              strings.search_deal_type,
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
 
             Row(
               children: [
-                _buildSelectButton("매매", str.category_buy),
-                const SizedBox(width: 10),
-                _buildSelectButton("임대", str.category_rent),
+                _buildSelectButton(keyValue: "매매", label: strings.deal_sale),
+                SizedBox(width: 10.w),
+                _buildSelectButton(keyValue: "임대", label: strings.deal_rent),
               ],
             ),
 
-            const SizedBox(height: 25),
+            SizedBox(height: 20.h),
 
-            // ===================== TYPES =====================
-            Text(
-              str.type,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-
-            Row(
-              children: propertyTypes.map((item) {
-                bool checked = selectedTypes.contains(item["key"]);
-
-                return Expanded(
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 20.w,
-                        height: 20.h,
-                        child: Checkbox(
-                          value: checked,
-                          onChanged: (_) {
-                            setState(() {
-                              checked
-                                  ? selectedTypes.remove(item["key"])
-                                  : selectedTypes.add(item["key"]!);
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          str.getValue(item["label_key"]!),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+            // ===================== RENT TYPE (ONLY IF 임대) =====================
+            if (selectedDealType == "임대")
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    strings.search_rent_type,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                );
-              }).toList(),
-            ),
+                  SizedBox(height: 10.h),
+                  Column(
+                    children: rentTypes.map((type) {
+                      return RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(type), // vẫn hiển thị Hàn (월세 / 년세)
+                        value: type,
+                        groupValue: selectedRentType,
+                        onChanged: (value) {
+                          setState(() => selectedRentType = value);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
 
             const Spacer(),
 
             // ===================== SEARCH BUTTON =====================
             SizedBox(
               width: double.infinity,
-              height: 55,
+              height: 55.h,
               child: ElevatedButton(
                 onPressed: loading ? null : _onSearch,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1675D0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
                 child: loading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : Text(
-                        str.search_button,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        strings.search_button,
+                        style: TextStyle(
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -170,25 +178,35 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // ======================= CATEGORY BUTTON =======================
-  Widget _buildSelectButton(String keyLabel, String title) {
-    bool active = selectedCategory == keyLabel;
+  // ======================= DEAL BUTTON =======================
+  Widget _buildSelectButton({
+    required String keyValue, // value cho state + API: "매매"/"임대"
+    required String label, // text hiển thị đa ngôn ngữ
+  }) {
+    final bool active = selectedDealType == keyValue;
 
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => selectedCategory = keyLabel),
+        onTap: () {
+          setState(() {
+            selectedDealType = keyValue;
+
+            // reset radio khi từ 임대 chuyển sang 매매
+            if (keyValue == "매매") selectedRentType = null;
+          });
+        },
         child: Container(
-          height: 50,
+          height: 50.h,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
             color: active ? Colors.white : Colors.grey.shade300,
             border: Border.all(color: active ? Colors.black : Colors.grey),
           ),
           child: Text(
-            title,
+            label,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.bold,
               color: active ? Colors.black : Colors.grey.shade600,
             ),
@@ -198,28 +216,49 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // ========================== SEARCH LOGIC ==========================
+  // ========================== SEARCH ACTION ==========================
   void _onSearch() async {
-    final str = AppString.of(context);
+    final strings = AppString.of(context);
 
     if (selectedLocationId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(str.select_location_warning)));
+      ).showSnackBar(SnackBar(content: Text(strings.error_pick_location)));
       return;
     }
 
+    // Nếu chọn 임대 thì bắt buộc chọn 월세 / 년세
+    if (selectedDealType == "임대" && selectedRentType == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(strings.error_pick_rent_type)));
+      return;
+    }
+
+    // Xác định property_type cho API
+    late final String propertyType;
+
+    if (selectedDealType == "매매") {
+      propertyType = "매매";
+    } else {
+      // 임대
+      propertyType = selectedRentType!; // 월세 hoặc 년세 (đã check null phía trên)
+    }
+
     try {
+      setState(() => loading = true);
+
       final results = await PropertyService.searchProperties(
-        status: selectedCategory,
-        types: selectedTypes,
-        locationId: selectedLocationId,
+        propertyType: propertyType,
+        locationId: selectedLocationId!,
       );
+
+      setState(() => loading = false);
 
       if (results.isEmpty) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(str.search_no_result)));
+        ).showSnackBar(SnackBar(content: Text(strings.search_no_result)));
         return;
       }
 
@@ -228,33 +267,34 @@ class _SearchScreenState extends State<SearchScreen> {
         MaterialPageRoute(builder: (_) => SearchResultScreen(results: results)),
       );
     } catch (e) {
+      setState(() => loading = false);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("${str.search_failed}: $e")));
+      ).showSnackBar(SnackBar(content: Text("${strings.error_search}: $e")));
     }
   }
 
   // ========================== LOCATION PICKER ==========================
   void _openLocationPicker() async {
-    final str = AppString.of(context);
+    if (locations.isEmpty) return;
+
     final RenderBox box =
         locationKey.currentContext!.findRenderObject() as RenderBox;
+    final pos = box.localToGlobal(Offset.zero);
+    final size = box.size;
 
-    final Offset pos = box.localToGlobal(Offset.zero);
-    final Size size = box.size;
-
-    final selected = await showMenu(
+    final selected = await showMenu<Map<String, dynamic>>(
       context: context,
       position: RelativeRect.fromLTRB(
         pos.dx,
-        pos.dy + size.height + 4, // mở NGAY dưới ô Location
+        pos.dy + size.height + 4,
         pos.dx + size.width,
         0,
       ),
       items: locations.map((loc) {
-        return PopupMenuItem(
+        return PopupMenuItem<Map<String, dynamic>>(
           value: loc,
-          child: Text(str.getValue(loc["key"]!)),
+          child: Text(loc["name"]),
         );
       }).toList(),
     );
@@ -262,7 +302,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (selected != null) {
       setState(() {
         selectedLocationId = selected["id"];
-        selectedLocationLabel = str.getValue(selected["key"]!);
+        selectedLocationLabel = selected["name"];
       });
     }
   }

@@ -2,6 +2,7 @@
   "@@locale": "ko",
 
   "findYourHome": "한국어",
+
   "footer_search": "상세검색",
   "footer_nearby": "내위치매물",
   "footer_home": "홈",
@@ -12,11 +13,14 @@
   "hotPropertiesTitle": "추천 매물",
 
   "search_title": "검색하기",
+
   "location": "위치",
   "location_placeholder": "하노이, 호치민, 다낭 등 선택",
+
   "category": "구분",
   "category_buy": "매매",
   "category_rent": "임대",
+
   "type": "형태",
   "search_button": "검색하기",
   "search_failed": "검색 실패",
@@ -48,5 +52,19 @@
   "profile_contract_sub": "계약 정보",
 
   "profile_logout": "로그아웃",
-  "profile_logout_sub": "로그아웃"
+  "profile_logout_sub": "로그아웃",
+
+  "search_area": "지역",
+  "search_pick_location": "지역 선택",
+  "search_loading_location": "지역 불러오는 중...",
+
+  "search_deal_type": "거래 유형",
+  "deal_sale": "매매",
+  "deal_rent": "임대",
+
+  "search_rent_type": "임대 형태 (월세 / 년세)",
+
+  "error_pick_location": "지역을 선택하세요",
+  "error_pick_rent_type": "임대 형태(월세/년세)를 선택하세요",
+  "error_search": "검색 오류"
 }

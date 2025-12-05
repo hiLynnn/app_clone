@@ -29,6 +29,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_html: ^3.0.0
   google_maps_flutter: ^2.14.0
+  geolocator: ^14.0.2
 
   cupertino_icons: ^1.0.8
 
@@ -45,6 +46,7 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/images/house/
+    - assets/images/maps/
     - assets/fonts/
   fonts:
     - family: Pretendard

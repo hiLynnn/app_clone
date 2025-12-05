@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/property_model.dart';
 
 class PropertyService {
@@ -56,19 +57,26 @@ class PropertyService {
   }
 
   // ================= SEARCH PROPERTIES =================
+  //
+  // API docs:
+  // - status: Active / Pending / Sold
+  // - property_type: 매매 / 월세 / 년세
   static Future<List<PropertyModel>> searchProperties({
-    required String status,
-    required List<String> types,
-    required int? locationId,
+    required String propertyType, // 매매 / 월세 / 년세
+    required int locationId,
+    int page = 1,
+    int limit = 20,
   }) async {
     final uri = Uri.parse(baseUrl).replace(
       queryParameters: {
-        "status": status,
-        "location_id": locationId?.toString(),
-        "types": types.join(","),
-        "is_published": "1",
+        "page": "$page",
+        "limit": "$limit",
         "sort": "created",
-      }..removeWhere((key, value) => value == null),
+        "status": "Active",
+        "is_published": "1",
+        "location_id": "$locationId",
+        "property_type": propertyType,
+      },
     );
 
     print("SEARCH CALL: $uri");
@@ -83,9 +91,9 @@ class PropertyService {
     }
 
     final json = jsonDecode(res.body);
-    return (json["data"] as List)
-        .map((e) => PropertyModel.fromJson(e))
-        .toList();
+    final List data = json["data"] ?? [];
+
+    return data.map((e) => PropertyModel.fromJson(e)).toList();
   }
 
   // ================= PROPERTY DETAIL =================
@@ -101,5 +109,38 @@ class PropertyService {
 
     final json = jsonDecode(res.body);
     return PropertyModel.fromJson(json);
+  }
+
+  // ================= LOCATIONS (KHU VỰC) =================
+  static Future<List<Map<String, dynamic>>> getLocations() async {
+    const url = "https://api.sdfsdf.co.kr/api/locations.php?is_active=1";
+
+    print("CALL Locations: $url");
+
+    final res = await http.get(Uri.parse(url), headers: _headers);
+
+    print("LOC STATUS: ${res.statusCode}");
+    print("LOC RAW: ${res.body}");
+
+    if (res.statusCode != 200) {
+      throw Exception("Failed to load locations (${res.statusCode})");
+    }
+
+    final json = jsonDecode(res.body);
+
+    if (json["success"] != true) {
+      throw Exception(json["message"] ?? "Location API error");
+    }
+
+    final List data = json["data"];
+
+    return data.map<Map<String, dynamic>>((loc) {
+      return {
+        "id": loc["id"],
+        "name": loc["name"],
+        "sort_order": loc["sort_order"],
+        "is_active": loc["is_active"],
+      };
+    }).toList();
   }
 }

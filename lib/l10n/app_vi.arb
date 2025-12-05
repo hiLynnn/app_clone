@@ -1,40 +1,71 @@
 {
-    "findYourHome" : "Tìm nhà mơ ước",
-    "footer_search": "Tìm kiếm",
-    "footer_nearby": "Gần đây",
-    "footer_home": "Trang chủ",
-    "footer_board": "Bảng tin",
-    "footer_mypage": "Cá nhân",
-    "quick_menu": "Quick Menu",
-    "hotPropertiesTitle": "Bất động sản gợi ý",
-    "search_title": "Tìm kiếm",
-    "location": "Khu vực",
-    "location_placeholder": "Chọn Hà Nội, Hồ Chí Minh, Đà Nẵng...",
-    "category": "Loại hình",
-    "category_buy": "Mua",
-    "category_rent": "Thuê",
-    "type": "Hình thức",
-    "search_button": "Tìm kiếm",
-    "search_failed": "Tìm kiếm thất bại",
-    "select_location_warning": "Vui lòng chọn khu vực",
-    "location_danang": "Đà Nẵng",
-    "location_hcm": "TP. Hồ Chí Minh",
-    "location_hanoi": "Hà Nội",
-    "property_land": "Đất",
-    "property_apartment": "Căn hộ",
-    "property_villa": "Biệt thự",
-    "property_officetel": "Officetel",
-    "search_result_title": "Kết quả tìm kiếm",
-    "search_no_result": "Không tìm thấy kết quả",
-    "profile_title": "Trang cá nhân",
-    "profile_username": "Tên người dùng",
-    "profile_email": "Email",
-    "profile_edit_info": "Sửa thông tin",
-    "profile_edit_info_sub": "Chỉnh sửa hồ sơ",
-    "profile_inbox": "Tin nhắn",
-    "profile_inbox_sub": "Hộp thư",
-    "profile_contract": "Thông tin hợp đồng",
-    "profile_contract_sub": "Chi tiết hợp đồng",
-    "profile_logout": "Đăng xuất",
-    "profile_logout_sub": "Thoát tài khoản"
+  "@@locale": "vi",
+
+  "findYourHome": "Tìm nhà mơ ước",
+
+  "footer_search": "Tìm kiếm",
+  "footer_nearby": "Gần đây",
+  "footer_home": "Trang chủ",
+  "footer_board": "Bảng tin",
+  "footer_mypage": "Cá nhân",
+
+  "quick_menu": "Quick Menu",
+  "hotPropertiesTitle": "Bất động sản gợi ý",
+
+  "search_title": "Tìm kiếm",
+
+  "location": "Khu vực",
+  "location_placeholder": "Chọn Hà Nội, Hồ Chí Minh, Đà Nẵng...",
+
+  "category": "Loại hình",
+  "category_buy": "Mua",
+  "category_rent": "Thuê",
+
+  "type": "Hình thức",
+
+  "search_button": "Tìm kiếm",
+  "search_failed": "Tìm kiếm thất bại",
+  "select_location_warning": "Vui lòng chọn khu vực",
+
+  "location_danang": "Đà Nẵng",
+  "location_hcm": "TP. Hồ Chí Minh",
+  "location_hanoi": "Hà Nội",
+
+  "property_land": "Đất",
+  "property_apartment": "Căn hộ",
+  "property_villa": "Biệt thự",
+  "property_officetel": "Officetel",
+
+  "search_result_title": "Kết quả tìm kiếm",
+  "search_no_result": "Không tìm thấy kết quả",
+
+  "profile_title": "Trang cá nhân",
+  "profile_username": "Tên người dùng",
+  "profile_email": "Email",
+
+  "profile_edit_info": "Sửa thông tin",
+  "profile_edit_info_sub": "Chỉnh sửa hồ sơ",
+
+  "profile_inbox": "Tin nhắn",
+  "profile_inbox_sub": "Hộp thư",
+
+  "profile_contract": "Thông tin hợp đồng",
+  "profile_contract_sub": "Chi tiết hợp đồng",
+
+  "profile_logout": "Đăng xuất",
+  "profile_logout_sub": "Thoát tài khoản",
+
+  "search_area": "Khu vực",
+  "search_pick_location": "Chọn khu vực",
+  "search_loading_location": "Đang tải khu vực...",
+
+  "search_deal_type": "Loại giao dịch",
+  "deal_sale": "Mua",
+  "deal_rent": "Thuê",
+
+  "search_rent_type": "Hình thức thuê (Theo tháng / Theo năm)",
+
+  "error_pick_location": "Vui lòng chọn khu vực",
+  "error_pick_rent_type": "Vui lòng chọn hình thức thuê",
+  "error_search": "Đã xảy ra lỗi khi tìm kiếm"
 }

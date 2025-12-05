@@ -1,9 +1,11 @@
 import 'package:app_clone/models/property_model.dart';
 import 'package:app_clone/services/property_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
   final int propertyId;
@@ -17,6 +19,7 @@ class PropertyDetailScreen extends StatefulWidget {
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   PropertyModel? data;
   bool loading = true;
+  int currentIndex = 0;
 
   @override
   void initState() {
@@ -50,6 +53,24 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          data!.name,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -57,17 +78,25 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 60),
-                  // _buildImages(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 40),
+
+                  /// ================== IMAGES ==================
+                  _buildImages(),
+                  const SizedBox(height: 20),
+
+                  /// ================== MAIN INFO ==================
                   _buildMainInfo(),
                   const SizedBox(height: 20),
+
+                  /// ================== OPTIONS ==================
                   _buildOptions(),
                   const SizedBox(height: 20),
+
+                  /// ================== DESCRIPTION ==================
                   _buildDescription(),
                   const SizedBox(height: 20),
-                  // _buildMap(),
-                  const SizedBox(height: 20),
+
+                  /// ================== AGENCY ==================
                   _buildAgency(),
                   const SizedBox(height: 40),
                 ],
@@ -75,50 +104,85 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
             ),
           ),
 
+          /// ================== BOTTOM BUTTONS ==================
           _bottomActions(),
         ],
       ),
     );
   }
 
-  // ====================== IMAGES ======================
+  // =======================================================
+  // SLIDER IMAGES (REUSED FROM HOME BANNER)
+  // =======================================================
   Widget _buildImages() {
-    final images = data!.images;
+    final List<String> images = data!.images.isNotEmpty
+        ? data!.images
+        : [data!.image]; // fallback 1 ảnh
 
-    return Stack(
+    return Column(
       children: [
-        images.isNotEmpty
-            ? CarouselSlider(
-                items: images
-                    .map(
-                      (img) => Image.network(
-                        img.startsWith("http")
-                            ? img
-                            : "http://42.115.7.129:8080$img", // FIXED
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const Icon(Icons.error),
-                      ),
-                    )
-                    .toList(),
-                options: CarouselOptions(
-                  height: 260,
-                  viewportFraction: 1,
-                  autoPlay: true,
-                ),
-              )
-            : Image.network(
-                data!.image,
-                width: double.infinity,
-                height: 260,
+        CarouselSlider(
+          items: images.map((img) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: CachedNetworkImage(
+                imageUrl: img.startsWith("http")
+                    ? img
+                    : "https://api.sdfsdf.co.kr$img",
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(Icons.error),
+                width: double.infinity,
+                placeholder: (_, __) => _bigImageShimmer(),
+                errorWidget: (_, __, ___) => _bigImageShimmer(),
               ),
+            );
+          }).toList(),
+          options: CarouselOptions(
+            height: 250.h,
+            viewportFraction: 1,
+            autoPlay: true,
+            onPageChanged: (index, _) => setState(() => currentIndex = index),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        /// Indicator
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            images.length,
+            (index) => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: currentIndex == index ? 14 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: currentIndex == index
+                    ? Colors.blue
+                    : Colors.grey.shade400,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  // ====================== NAME + PRICE ======================
+  Widget _bigImageShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 250.h,
+        width: double.infinity,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  // =======================================================
+  // MAIN INFO
+  // =======================================================
   Widget _buildMainInfo() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -154,48 +218,44 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     );
   }
 
-  // ====================== OPTIONS ======================
+  // =======================================================
+  // OPTIONS
+  // =======================================================
   Widget _buildOptions() {
     if (data!.options.isEmpty) return const SizedBox();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Wrap(
-        spacing: 14,
+        spacing: 12,
         runSpacing: 10,
-        children: data!.options
-            .map(
-              (opt) => Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 12,
+        children: data!.options.map((op) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(op.name),
+                const SizedBox(width: 6),
+                Text(
+                  op.value,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey.shade200,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(opt.name, style: const TextStyle(fontSize: 14)),
-                    const SizedBox(width: 6),
-                    Text(
-                      opt.value,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-            .toList(),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 
-  // ====================== DESCRIPTION ======================
+  // =======================================================
+  // DESCRIPTION
+  // =======================================================
   Widget _buildDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -212,34 +272,17 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     );
   }
 
-  // ====================== MAP ======================
-  Widget _buildMap() {
-    return SizedBox(
-      height: 250,
-      child: gmap.GoogleMap(
-        initialCameraPosition: gmap.CameraPosition(
-          target: gmap.LatLng(data!.lat, data!.lng),
-          zoom: 16,
-        ),
-        markers: {
-          gmap.Marker(
-            markerId: const gmap.MarkerId("location"),
-            position: gmap.LatLng(data!.lat, data!.lng),
-          ),
-        },
-      ),
-    );
-  }
-
-  // ====================== AGENCY ======================
+  // =======================================================
+  // AGENCY
+  // =======================================================
   Widget _buildAgency() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
           color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,12 +293,18 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
             ),
             const SizedBox(height: 12),
 
+            /// Avatar
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 28,
-                  backgroundImage: AssetImage(
-                    "assets/images/agent_placeholder.png",
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: CachedNetworkImage(
+                    imageUrl: data!.agencyImage,
+                    width: 64,
+                    height: 64,
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => _avatarShimmer(),
+                    errorWidget: (_, __, ___) => _avatarShimmer(),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -271,7 +320,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ],
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text("Số điện thoại: ${data!.agencyPhone}"),
             Text("Địa chỉ: ${data!.agencyAddress}"),
           ],
@@ -280,7 +329,24 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     );
   }
 
-  // ====================== BOTTOM ACTIONS ======================
+  Widget _avatarShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: 64,
+        height: 64,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  // =======================================================
+  // BOTTOM BUTTONS
+  // =======================================================
   Widget _bottomActions() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -304,7 +370,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
               onPressed: () {},
               child: const Text(
-                "Gọi ngay",
+                "Call",
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
@@ -318,7 +384,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
               onPressed: () {},
               child: const Text(
-                "Nhắn tin",
+                "Message",
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),

@@ -1,41 +1,70 @@
 {
-    "findYourHome" : "Findddddd",
-    "footer_search" : "Search",
-    "footer_nearby": "Nearby",
-    "footer_home": "Home",
-    "footer_board": "Board",
-    "footer_mypage": "My Page",
-    "quick_menu": "Quick Menu",
-    "hotPropertiesTitle": "Recommended Properties",
-    "search_title": "Search",
-    "location": "Location",
-    "location_placeholder": "Select Hanoi, Ho Chi Minh, Danang...",
-    "category": "Category",
-    "category_buy": "Buy",
-    "category_rent": "Rent",
-    "type": "Type",
-    "search_button": "Search",
-    "search_failed": "Search failed",
-    "select_location_warning": "Please select a location",
-    "location_danang": "Danang",
-    "location_hcm": "Ho Chi Minh City",
-    "location_hanoi": "Hanoi",
-    "property_land": "Land",
-    "property_apartment": "Apartment",
-    "property_villa": "Villa",
-    "property_officetel": "Officetel",
-    "search_result_title": "Search Results",
-    "search_no_result": "No results found",
-    "profile_title": "My Page",
-    "profile_username": "User Name",
-    "profile_email": "Email",
-    "profile_edit_info": "Edit Information",
-    "profile_edit_info_sub": "Modify profile",
-    "profile_inbox": "Inbox",
-    "profile_inbox_sub": "Messages",
-    "profile_contract": "Contract Info",
-    "profile_contract_sub": "Contract details",
-    "profile_logout": "Logout",
-    "profile_logout_sub": "Log out"
+  "@@locale": "en",
 
+  "findYourHome": "Findddddd",
+
+  "footer_search": "Search",
+  "footer_nearby": "Nearby",
+  "footer_home": "Home",
+  "footer_board": "Board",
+  "footer_mypage": "My Page",
+
+  "quick_menu": "Quick Menu",
+  "hotPropertiesTitle": "Recommended Properties",
+
+  "search_title": "Search",
+
+  "location": "Location",
+  "location_placeholder": "Select Hanoi, Ho Chi Minh, Danang...",
+
+  "category": "Category",
+  "category_buy": "Buy",
+  "category_rent": "Rent",
+
+  "type": "Type",
+  "search_button": "Search",
+  "search_failed": "Search failed",
+  "select_location_warning": "Please select a location",
+
+  "location_danang": "Danang",
+  "location_hcm": "Ho Chi Minh City",
+  "location_hanoi": "Hanoi",
+
+  "property_land": "Land",
+  "property_apartment": "Apartment",
+  "property_villa": "Villa",
+  "property_officetel": "Officetel",
+
+  "search_result_title": "Search Results",
+  "search_no_result": "No results found",
+
+  "profile_title": "My Page",
+  "profile_username": "User Name",
+  "profile_email": "Email",
+
+  "profile_edit_info": "Edit Information",
+  "profile_edit_info_sub": "Modify profile",
+
+  "profile_inbox": "Inbox",
+  "profile_inbox_sub": "Messages",
+
+  "profile_contract": "Contract Info",
+  "profile_contract_sub": "Contract details",
+
+  "profile_logout": "Logout",
+  "profile_logout_sub": "Log out",
+
+  "search_area": "Area",
+  "search_pick_location": "Select area",
+  "search_loading_location": "Loading locations...",
+
+  "search_deal_type": "Transaction Type",
+  "deal_sale": "Sale",
+  "deal_rent": "Rent",
+
+  "search_rent_type": "Rent Option (Wolse / Yeonse)",
+
+  "error_pick_location": "Please choose an area",
+  "error_pick_rent_type": "Please choose a rent type",
+  "error_search": "Search error"
 }

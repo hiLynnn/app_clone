@@ -121,4 +121,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profile_logout_sub => 'Log out';
+
+  @override
+  String get search_area => 'Area';
+
+  @override
+  String get search_pick_location => 'Select area';
+
+  @override
+  String get search_loading_location => 'Loading locations...';
+
+  @override
+  String get search_deal_type => 'Transaction Type';
+
+  @override
+  String get deal_sale => 'Sale';
+
+  @override
+  String get deal_rent => 'Rent';
+
+  @override
+  String get search_rent_type => 'Rent Option (Wolse / Yeonse)';
+
+  @override
+  String get error_pick_location => 'Please choose an area';
+
+  @override
+  String get error_pick_rent_type => 'Please choose a rent type';
+
+  @override
+  String get error_search => 'Search error';
 }

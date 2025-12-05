@@ -7,8 +7,8 @@ class PropertyModel {
   final String status;
   final String location;
 
-  final int locationId;
-  final int agentId;
+  final int? locationId;
+  final int? agentId;
 
   final String propertyType;
   final String buildingType;
@@ -26,10 +26,9 @@ class PropertyModel {
   final List<String> images;
   final String image;
 
-  // ============ NEW (từ API detail) ============
+  // AGENCY
   final String agentName;
   final String agentUserId;
-
   final String agencyName;
   final String agencyPhone;
   final String agencyAddress;
@@ -44,25 +43,19 @@ class PropertyModel {
     required this.price,
     required this.status,
     required this.location,
-
     required this.locationId,
     required this.agentId,
-
     required this.propertyType,
     required this.buildingType,
-
     required this.options,
     required this.isPublished,
     required this.isMain,
     required this.isHot,
-
     required this.description,
     required this.lat,
     required this.lng,
-
     required this.images,
     required this.image,
-
     required this.agentName,
     required this.agentUserId,
     required this.agencyName,
@@ -75,35 +68,42 @@ class PropertyModel {
   });
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) {
-    // OPTIONS
+    // ---------------- OPTIONS ----------------
     List<PropertyOption> parsedOptions = [];
     try {
-      if (json["options"] != null &&
-          json["options"] is String &&
-          json["options"] != "") {
-        parsedOptions = (jsonDecode(json["options"]) as List)
-            .map((o) => PropertyOption.fromJson(o))
-            .toList();
+      final raw = json["options"]?.toString() ?? "";
+      if (raw.isNotEmpty && raw != "[]") {
+        final decoded = jsonDecode(raw);
+        parsedOptions = List<Map<String, dynamic>>.from(
+          decoded,
+        ).map((e) => PropertyOption.fromJson(e)).toList();
       }
     } catch (_) {}
 
-    // IMAGES
+    // ---------------- IMAGES ----------------
     List<String> parsedImages = [];
     try {
-      if (json["images"] != null &&
-          json["images"] is String &&
-          json["images"] != "") {
-        parsedImages = List<String>.from(jsonDecode(json["images"]));
+      final raw = json["images"]?.toString() ?? "";
+      if (raw.isNotEmpty && raw != "[]") {
+        final decoded = jsonDecode(raw);
+
+        if (decoded is List) {
+          parsedImages = decoded.map((e) => fullUrl(e.toString())).toList();
+        }
       }
     } catch (_) {}
 
-    // MAIN IMAGE
-    String finalImage = "";
-    if (json["image"] != null && json["image"] != "") {
-      String raw = json["image"].toString();
-      finalImage = raw.startsWith("http")
-          ? raw
-          : "http://42.115.7.129:8080$raw";
+    // ---------------- MAIN IMAGE ----------------
+    String mainImg = "";
+    if (json["image"] != null && json["image"].toString().isNotEmpty) {
+      mainImg = fullUrl(json["image"].toString());
+    }
+
+    // ---------------- AGENT IMAGE ----------------
+    String agencyImg = "";
+    if (json["agency_image"] != null &&
+        json["agency_image"].toString().isNotEmpty) {
+      agencyImg = fullUrl(json["agency_image"]);
     }
 
     return PropertyModel(
@@ -112,9 +112,8 @@ class PropertyModel {
       price: json["price"] ?? "",
       status: json["status"] ?? "",
       location: json["location"] ?? "",
-
-      locationId: json["location_id"] ?? 0,
-      agentId: json["agent_id"] ?? 0,
+      locationId: json["location_id"],
+      agentId: json["agent_id"],
 
       propertyType: json["property_type"] ?? "",
       buildingType: json["building_type"] ?? "",
@@ -129,19 +128,31 @@ class PropertyModel {
       lng: double.tryParse(json["lng"]?.toString() ?? "") ?? 0,
 
       images: parsedImages,
-      image: finalImage,
+      image: mainImg,
 
-      // NEW FIELDS
-      agentName: json["agent_name"] ?? "",
+      agentName: json["agent"] ?? "",
       agentUserId: json["agent_userid"] ?? "",
       agencyName: json["agency_name"] ?? "",
-      agencyPhone: json["agency_phone"] ?? "",
+      agencyPhone: json["contact"] ?? "",
       agencyAddress: json["agency_address"] ?? "",
-      agencyImage: json["agency_image"] ?? "",
+      agencyImage: agencyImg,
       agencyDescription: json["agency_description"] ?? "",
       agencyLat: double.tryParse(json["agency_lat"]?.toString() ?? "") ?? 0,
       agencyLng: double.tryParse(json["agency_lng"]?.toString() ?? "") ?? 0,
     );
+  }
+
+  static String fullUrl(String path) {
+    if (path.isEmpty) return "";
+
+    if (path.startsWith("http")) return path;
+
+    // path như "130/abc.jpg" → thêm /uploads/
+    if (!path.startsWith("/uploads/")) {
+      return "https://api.sdfsdf.co.kr/uploads/$path";
+    }
+
+    return "https://api.sdfsdf.co.kr$path";
   }
 }
 

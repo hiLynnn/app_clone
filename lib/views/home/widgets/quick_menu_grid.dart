@@ -56,7 +56,7 @@ class QuickMenuItem extends StatelessWidget {
                 Text(
                   item.title,
                   style: TextStyle(
-                    fontSize: 17.sp,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     shadows: const [

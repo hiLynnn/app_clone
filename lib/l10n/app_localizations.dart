@@ -327,6 +327,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log out'**
   String get profile_logout_sub;
+
+  /// No description provided for @search_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get search_area;
+
+  /// No description provided for @search_pick_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Select area'**
+  String get search_pick_location;
+
+  /// No description provided for @search_loading_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading locations...'**
+  String get search_loading_location;
+
+  /// No description provided for @search_deal_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Type'**
+  String get search_deal_type;
+
+  /// No description provided for @deal_sale.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale'**
+  String get deal_sale;
+
+  /// No description provided for @deal_rent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get deal_rent;
+
+  /// No description provided for @search_rent_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent Option (Wolse / Yeonse)'**
+  String get search_rent_type;
+
+  /// No description provided for @error_pick_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose an area'**
+  String get error_pick_location;
+
+  /// No description provided for @error_pick_rent_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a rent type'**
+  String get error_pick_rent_type;
+
+  /// No description provided for @error_search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search error'**
+  String get error_search;
 }
 
 class _AppLocalizationsDelegate
