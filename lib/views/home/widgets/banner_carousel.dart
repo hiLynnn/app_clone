@@ -32,7 +32,6 @@ class BannerCarousel extends StatelessWidget {
         items: controller.banners.map((BannerModel banner) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.symmetric(horizontal: 5.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
             ),

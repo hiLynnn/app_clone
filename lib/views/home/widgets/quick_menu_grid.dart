@@ -43,27 +43,32 @@ class QuickMenuItem extends StatelessWidget {
             child: Image.network(item.imageUrl, fit: BoxFit.cover),
           ),
 
-          // Black overlay (mờ cho chữ nổi bật)
           Positioned.fill(
             child: Container(color: Colors.black.withOpacity(0.35)),
           ),
 
           // Title text
           Center(
-            child: Text(
-              item.title,
-              style: TextStyle(
-                fontSize: 17.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                shadows: const [
-                  Shadow(
-                    offset: Offset(1, 1),
-                    blurRadius: 3,
-                    color: Colors.black45,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 70.h),
+                Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(1, 1),
+                        blurRadius: 3,
+                        color: Colors.black45,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

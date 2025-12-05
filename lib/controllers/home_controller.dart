@@ -1,22 +1,24 @@
-import 'dart:convert';
-
 import 'package:app_clone/models/banner_model.dart';
+import 'package:app_clone/models/property_model.dart';
 import 'package:app_clone/models/quick_menu_model.dart';
 import 'package:app_clone/services/banner_service.dart';
+import 'package:app_clone/services/property_service.dart';
 import 'package:app_clone/services/quick_menu_service.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController {
+  // DATA
   var banners = <BannerModel>[].obs;
   var secondBanners = <BannerModel>[].obs;
+  var quickMenus = <QuickMenuModel>[].obs;
+  var hotProperties = <PropertyModel>[].obs;
 
-  final quickMenus = <QuickMenuModel>[].obs;
-
-  // Loading
-  var isBannerLoading = true.obs;
-  final isSecondBannerLoading = false.obs;
-  final isQuickMenuLoading = false.obs;
+  // LOADING STATES
+  var isBannerLoading = false.obs;
+  var isSecondBannerLoading = false.obs;
+  var isQuickMenuLoading = false.obs;
+  var isHotLoading = false.obs;
+  bool isLoaded = false;
 
   @override
   void onInit() {
@@ -24,39 +26,67 @@ class HomeController extends GetxController {
     loadHomeData();
   }
 
-  void loadHomeData() {
-    fetchBanners();
-    fetchSecondBanners();
-    fetchQuickMenus();
+  // ================================
+  // LOAD ALL HOME DATA (song song)
+  // ================================
+  Future<void> loadHomeData() async {
+    if (isLoaded) return;
+    isLoaded = true;
+    await Future.wait([
+      fetchBanners(),
+      fetchSecondBanners(),
+      fetchQuickMenus(),
+      fetchHotProperties(),
+    ]);
   }
 
+  // ================================
+  // MAIN Banners
+  // ================================
   Future<void> fetchBanners() async {
     try {
       isBannerLoading(true);
-      final data = await BannerService.getMainBanners();
-      banners.assignAll(data);
+      banners.assignAll(await BannerService.getMainBanners());
     } finally {
       isBannerLoading(false);
     }
   }
 
+  // ================================
+  // SECOND Banners
+  // ================================
   Future<void> fetchSecondBanners() async {
     try {
-      isBannerLoading(true);
-      final data = await BannerService.getSecondBanners();
-      secondBanners.assignAll(data);
+      isSecondBannerLoading(true);
+      secondBanners.assignAll(await BannerService.getSecondBanners());
     } finally {
       isSecondBannerLoading(false);
     }
   }
 
+  // ================================
+  // QUICK MENU
+  // ================================
   Future<void> fetchQuickMenus() async {
     try {
       isQuickMenuLoading(true);
-      final data = await QuickMenuService.fetchQuickMenus();
-      quickMenus.assignAll(data);
+      quickMenus.assignAll(await QuickMenuService.fetchQuickMenus());
     } finally {
       isQuickMenuLoading(false);
+    }
+  }
+
+  Future<void> fetchHotProperties() async {
+    // ⭐ Không load lại nếu đã có dữ liệu
+    if (hotProperties.isNotEmpty) return;
+
+    try {
+      isHotLoading(true);
+
+      final data = await PropertyService.fetchHotProperties();
+      hotProperties.assignAll(data);
+    } finally {
+      isHotLoading(false);
     }
   }
 }

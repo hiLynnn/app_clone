@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_clone/models/property_model.dart';
 import 'package:app_clone/views/home/widgets/property_card.dart';
+import 'package:app_clone/views/property/property_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -64,7 +65,20 @@ class _PropertyCarouselPagerState extends State<PropertyCarouselPager> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, i) {
-                    return PropertyCard(property: pageItems[i], onTap: () {});
+                    final item = pageItems[i];
+
+                    return PropertyCard(
+                      property: item,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                PropertyDetailScreen(propertyId: item.id),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
               );

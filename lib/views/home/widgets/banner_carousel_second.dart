@@ -32,12 +32,7 @@ class BannerCarouselSecond extends StatelessWidget {
         items: controller.secondBanners.map((BannerModel banner) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.symmetric(horizontal: 5.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-            ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.r),
               child: CachedNetworkImage(
                 imageUrl: banner.imagePath,
                 fit: BoxFit.cover,

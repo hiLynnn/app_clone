@@ -2,6 +2,7 @@ import 'package:app_clone/services/property_service.dart';
 import 'package:app_clone/views/search/search_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app_clone/core/common/utils/app_string.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -11,45 +12,50 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String selectedCategory = "매매"; // 매매 = bán, 임대 = cho thuê
+  String selectedCategory = "매매";
   List<String> selectedTypes = [];
   int? selectedLocationId;
 
   bool loading = false;
 
+  final GlobalKey locationKey = GlobalKey();
+
   final List<Map<String, dynamic>> locations = [
-    {"id": 4, "name": "다낭"},
-    {"id": 5, "name": "호치민"},
-    {"id": 6, "name": "하노이"},
+    {"id": 4, "key": "location_danang"},
+    {"id": 5, "key": "location_hcm"},
+    {"id": 6, "key": "location_hanoi"},
   ];
 
   final List<Map<String, String>> propertyTypes = [
-    {"key": "토지", "label": "토지"},
-    {"key": "아파트", "label": "아파트"},
-    {"key": "빌라", "label": "빌라"},
-    {"key": "오피스텔", "label": "오피스텔"},
+    {"key": "토지", "label_key": "property_land"},
+    {"key": "아파트", "label_key": "property_apartment"},
+    {"key": "빌라", "label_key": "property_villa"},
+    {"key": "오피스텔", "label_key": "property_officetel"},
   ];
 
   String? selectedLocationLabel;
 
   @override
   Widget build(BuildContext context) {
+    final str = AppString.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("검색하기"), centerTitle: true),
+      appBar: AppBar(title: Text(str.search_title), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ===================== LOCATION =====================
-            const Text(
-              "위치",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              str.location,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
             GestureDetector(
-              onTap: () => _openLocationPicker(context),
+              key: locationKey,
+              onTap: () => _openLocationPicker(),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
@@ -63,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selectedLocationLabel ?? "하노이, 호치민, 다낭 등 선택",
+                      selectedLocationLabel ?? str.location_placeholder,
                       style: const TextStyle(fontSize: 16),
                     ),
                     const Icon(Icons.arrow_drop_down),
@@ -74,27 +80,27 @@ class _SearchScreenState extends State<SearchScreen> {
 
             const SizedBox(height: 25),
 
-            // ===================== CATEGORY (매매/임대) =====================
-            const Text(
-              "구분",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ===================== CATEGORY =====================
+            Text(
+              str.category,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
             Row(
               children: [
-                _buildSelectButton("매매"),
+                _buildSelectButton("매매", str.category_buy),
                 const SizedBox(width: 10),
-                _buildSelectButton("임대"),
+                _buildSelectButton("임대", str.category_rent),
               ],
             ),
 
             const SizedBox(height: 25),
 
             // ===================== TYPES =====================
-            const Text(
-              "형태",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              str.type,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
@@ -104,16 +110,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 return Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
                         width: 20.w,
                         height: 20.h,
                         child: Checkbox(
                           value: checked,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: VisualDensity.compact,
                           onChanged: (_) {
                             setState(() {
                               checked
@@ -123,10 +125,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
                         ),
                       ),
-                      const SizedBox(width: 4), // thu nhỏ spacing
+                      const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          item["label"]!,
+                          str.getValue(item["label_key"]!),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -152,9 +154,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 child: loading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        "검색하기",
-                        style: TextStyle(
+                    : Text(
+                        str.search_button,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -168,13 +170,13 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // ======================= CATEGORY (매매/임대) BUTTON =======================
-  Widget _buildSelectButton(String label) {
-    bool active = selectedCategory == label;
+  // ======================= CATEGORY BUTTON =======================
+  Widget _buildSelectButton(String keyLabel, String title) {
+    bool active = selectedCategory == keyLabel;
 
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => selectedCategory = label),
+        onTap: () => setState(() => selectedCategory = keyLabel),
         child: Container(
           height: 50,
           alignment: Alignment.center,
@@ -184,7 +186,7 @@ class _SearchScreenState extends State<SearchScreen> {
             border: Border.all(color: active ? Colors.black : Colors.grey),
           ),
           child: Text(
-            label,
+            title,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -198,10 +200,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // ========================== SEARCH LOGIC ==========================
   void _onSearch() async {
+    final str = AppString.of(context);
+
     if (selectedLocationId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("위치를 선택하세요.")));
+      ).showSnackBar(SnackBar(content: Text(str.select_location_warning)));
       return;
     }
 
@@ -212,6 +216,13 @@ class _SearchScreenState extends State<SearchScreen> {
         locationId: selectedLocationId,
       );
 
+      if (results.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(str.search_no_result)));
+        return;
+      }
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => SearchResultScreen(results: results)),
@@ -219,29 +230,40 @@ class _SearchScreenState extends State<SearchScreen> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("검색 실패: $e")));
+      ).showSnackBar(SnackBar(content: Text("${str.search_failed}: $e")));
     }
   }
 
   // ========================== LOCATION PICKER ==========================
-  void _openLocationPicker(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: locations.map((loc) {
-          return ListTile(
-            title: Text(loc["name"]),
-            onTap: () {
-              setState(() {
-                selectedLocationId = loc["id"];
-                selectedLocationLabel = loc["name"];
-              });
-              Navigator.pop(ctx);
-            },
-          );
-        }).toList(),
+  void _openLocationPicker() async {
+    final str = AppString.of(context);
+    final RenderBox box =
+        locationKey.currentContext!.findRenderObject() as RenderBox;
+
+    final Offset pos = box.localToGlobal(Offset.zero);
+    final Size size = box.size;
+
+    final selected = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        pos.dx,
+        pos.dy + size.height + 4, // mở NGAY dưới ô Location
+        pos.dx + size.width,
+        0,
       ),
+      items: locations.map((loc) {
+        return PopupMenuItem(
+          value: loc,
+          child: Text(str.getValue(loc["key"]!)),
+        );
+      }).toList(),
     );
+
+    if (selected != null) {
+      setState(() {
+        selectedLocationId = selected["id"];
+        selectedLocationLabel = str.getValue(selected["key"]!);
+      });
+    }
   }
 }

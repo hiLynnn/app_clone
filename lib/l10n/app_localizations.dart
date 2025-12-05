@@ -141,6 +141,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quick Menu'**
   String get quick_menu;
+
+  /// No description provided for @hotPropertiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Properties'**
+  String get hotPropertiesTitle;
+
+  /// No description provided for @search_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search_title;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @location_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Hanoi, Ho Chi Minh, Danang...'**
+  String get location_placeholder;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @category_buy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get category_buy;
+
+  /// No description provided for @category_rent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get category_rent;
+
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @search_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search_button;
+
+  /// No description provided for @search_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed'**
+  String get search_failed;
+
+  /// No description provided for @select_location_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a location'**
+  String get select_location_warning;
+
+  /// No description provided for @location_danang.
+  ///
+  /// In en, this message translates to:
+  /// **'Danang'**
+  String get location_danang;
+
+  /// No description provided for @location_hcm.
+  ///
+  /// In en, this message translates to:
+  /// **'Ho Chi Minh City'**
+  String get location_hcm;
+
+  /// No description provided for @location_hanoi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hanoi'**
+  String get location_hanoi;
+
+  /// No description provided for @property_land.
+  ///
+  /// In en, this message translates to:
+  /// **'Land'**
+  String get property_land;
+
+  /// No description provided for @property_apartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment'**
+  String get property_apartment;
+
+  /// No description provided for @property_villa.
+  ///
+  /// In en, this message translates to:
+  /// **'Villa'**
+  String get property_villa;
+
+  /// No description provided for @property_officetel.
+  ///
+  /// In en, this message translates to:
+  /// **'Officetel'**
+  String get property_officetel;
+
+  /// No description provided for @search_result_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Results'**
+  String get search_result_title;
+
+  /// No description provided for @search_no_result.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get search_no_result;
+
+  /// No description provided for @profile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'My Page'**
+  String get profile_title;
+
+  /// No description provided for @profile_username.
+  ///
+  /// In en, this message translates to:
+  /// **'User Name'**
+  String get profile_username;
+
+  /// No description provided for @profile_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profile_email;
+
+  /// No description provided for @profile_edit_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Information'**
+  String get profile_edit_info;
+
+  /// No description provided for @profile_edit_info_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Modify profile'**
+  String get profile_edit_info_sub;
+
+  /// No description provided for @profile_inbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get profile_inbox;
+
+  /// No description provided for @profile_inbox_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get profile_inbox_sub;
+
+  /// No description provided for @profile_contract.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract Info'**
+  String get profile_contract;
+
+  /// No description provided for @profile_contract_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract details'**
+  String get profile_contract_sub;
+
+  /// No description provided for @profile_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get profile_logout;
+
+  /// No description provided for @profile_logout_sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get profile_logout_sub;
 }
 
 class _AppLocalizationsDelegate

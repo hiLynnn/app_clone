@@ -27,6 +27,8 @@ dependencies:
     sdk: flutter
   get: ^4.7.3
   shimmer: ^3.0.0
+  flutter_html: ^3.0.0
+  google_maps_flutter: ^2.14.0
 
   cupertino_icons: ^1.0.8
 

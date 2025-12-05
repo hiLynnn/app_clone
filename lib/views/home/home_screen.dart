@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // --- Banner ---
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.all(16.w),
+                padding: EdgeInsets.only(bottom: 16.h),
                 child: BannerCarousel(),
               ),
             ),
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: EdgeInsets.all(16.w),
                 child: Text(
-                  "추천 매물",
+                  AppString.of(context).hotPropertiesTitle,
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -105,18 +105,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             SliverToBoxAdapter(
-              child: loadingHot
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : PropertyCarouselPager(items: hotItems),
+              child: Obx(() {
+                final controller = Get.find<HomeController>();
+
+                if (controller.isHotLoading.value) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                if (controller.hotProperties.isEmpty) {
+                  return Center(child: Text("No data"));
+                }
+
+                return PropertyCarouselPager(items: controller.hotProperties);
+              }),
             ),
 
             // --- Second Banner ---
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.all(16.w),
+                padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
                 child: BannerCarouselSecond(),
               ),
             ),
